@@ -146,7 +146,7 @@ function quick_scan(){
 	fi
 	echo "Starting IP range scan for enabled servers, this might take a bit so be patient......" | grep --color -E 'Starting IP range scan for enabled servers||this might take a bit so be patient'
 	echo '...'
-	cat "$rangeFile" | parallel -k -j $threadCount nmap {} -sS -n -T5 -PN -p3389 --min-parallelism 150 --max-parallelism 230 -oG "$STORAGE1"{} > /dev/null && grep '/open/' "$STORAGE1" | cut -d' ' -f2,4 | sed -e 's/\/open\/tcp\/\/ms-term-serv\/\/\///g' | awk '{ print $1 }' >> "$STORAGE2"
+	cat "$rangeFile" | parallel -k -j $threadCount nmap {} -sS -n -T5 -PN -p3389 --min-parallelism 150 --max-parallelism 230 -oG "$STORAGE1"{} > /dev/null && grep '/open/' "$STORAGE1"* | cut -d' ' -f2,4 | sed -e 's/\/open\/tcp\/\/ms-term-serv\/\/\///g' | awk '{ print $1 }' >> "$STORAGE2" && rm -f "$STORAGE1"*
 	if [ ! -d rdp_enabled/ ]; then
 		mkdir rdp_enabled/
 	fi
@@ -189,3 +189,4 @@ fi
 rm -f "$STORAGE1" 2> /dev/null
 rm -f "$STORAGE2" 2> /dev/null
 #EOF
+
